@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-Mapper.dtd">
+<mapper namespace="com.frontier.demo.mapper.UserMapper">
+    <resultMap id="userDO"
+               type="com.frontier.demo.pojo.domain.UserDO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="birthday" column="birthday"/>
+    </resultMap>
+
+    <!-- 根据用户编号查询用户 -->
+    <select id="getUser" resultMap="userDO">
+        select u.id, u.name, u.age, u.sex, u.birthday
+        from sys_user u
+        where u.id = #{value}
+    </select>
+
+    <!-- 查询用户集合 -->
+    <select id="listUsers" resultMap="userDO">
+        select u.id, u.name, u.age, u.sex, u.birthday
+        from sys_user u
+        <where>
+            <if test="name != null">
+                u.name like concat(#{name}, '%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 添加用户 -->
+    <insert id="saveUser" parameterType="com.frontier.demo.pojo.param.SaveUserParam">
+        insert into sys_user(name, age, sex, birthday) values(#{name}, #{age}, #{sex}, #{birthday})
+    </insert>
+</mapper>
